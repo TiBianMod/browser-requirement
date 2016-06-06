@@ -1,0 +1,22 @@
+{
+    "name": "tibian/browser-requirement",
+    "description": "Browser Requirement for Laravel",
+    "keywords": ["browser", "requirement", "laravel"],
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michalis Giannas",
+            "email": "info@tibian.me",
+            "homepage": "https://tibian.me"
+        }
+    ],
+    "require": {
+        "sinergi/browser-detector": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TiBian\\BrowserRequirement\\": "src"
+        }
+    }
+}
