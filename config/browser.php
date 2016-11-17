@@ -1,7 +1,7 @@
 <?php
 
-use Sinergi\BrowserDetector\Browser;
 use Sinergi\BrowserDetector\Os;
+use Sinergi\BrowserDetector\Browser;
 
 return [
 

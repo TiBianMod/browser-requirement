@@ -15,7 +15,7 @@ class BrowserRequirementServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application services.
      *
-     * @return void
+     * @param \Illuminate\Routing\Router $router
      */
     public function boot(Router $router)
     {
@@ -28,8 +28,6 @@ class BrowserRequirementServiceProvider extends ServiceProvider
 
     /**
      * Register the application services.
-     *
-     * @return void
      */
     public function register()
     {

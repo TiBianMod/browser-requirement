@@ -50,24 +50,20 @@ class BrowserRequirement
     protected $isUnsupportedBrowser;
 
     /**
-     * OS Object
-     *
-     * @var object Os
+     * @var \Sinergi\BrowserDetector\Os
      */
     protected $os;
 
     /**
-     * Browser Object
-     *
-     * @var object Browser
+     * @var \Sinergi\BrowserDetector\Browser
      */
     protected $browser;
 
     /**
      * BrowserRequirement constructor.
      *
-     * @param Browser $browser
-     * @param Os $os
+     * @param \Sinergi\BrowserDetector\Browser $browser
+     * @param \Sinergi\BrowserDetector\Os $os
      */
     public function __construct(Browser $browser, Os $os)
     {
@@ -83,14 +79,34 @@ class BrowserRequirement
     }
 
     /**
-     * Determine if the Browser is Unsupported
+     * Handle an incoming request.
      *
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        if ($this->isUnsupportedBrowser) {
+            if (! $this->isUnsupportedPage()) {
+                return redirect($this->routeUnsupportedBrowser);
+            }
+        } else {
+            if ($this->isUnsupportedPage()) {
+                return redirect($this->routeSupportedBrowser);
+            }
+        }
+
+        return $next($request);
+    }
+
+    /**
      * @return bool
      */
-    private function isUnsupportedBrowser()
+    protected function isUnsupportedBrowser()
     {
         if (array_key_exists($this->os->getName(), $this->supportedVersions)) {
-
             $browsers = $this->supportedVersions[$this->os->getName()];
 
             foreach ($browsers as $browser => $version) {
@@ -106,24 +122,10 @@ class BrowserRequirement
     }
 
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
+     * @return bool
      */
-    public function handle(Request $request, Closure $next)
+    protected function isUnsupportedPage()
     {
-        if ($this->isUnsupportedBrowser) {
-            if ($this->currentPage != $this->routeUnsupportedBrowser) {
-                return redirect($this->routeUnsupportedBrowser);
-            }
-        } else {
-            if ($this->currentPage == $this->routeUnsupportedBrowser) {
-                return redirect($this->routeSupportedBrowser);
-            }
-        }
-
-        return $next($request);
+        return $this->currentPage == $this->routeUnsupportedBrowser;
     }
 }
